@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRANZ CALCUTE</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #111, #333);
+        }
+
+        .container {
+            width: 340px;
+            padding: 25px;
+            border-radius: 20px;
+            background: #1d1d1d;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            color: white;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 28px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 10px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .start {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        #calculator {
+            display: none;
+        }
+
+        #display {
+            width: 100%;
+            height: 55px;
+            margin-bottom: 15px;
+            text-align: right;
+            font-size: 25px;
+            padding: 10px;
+            background: white;
+            color: black;
+            border-radius: 10px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .buttons button {
+            height: 55px;
+            font-size: 20px;
+        }
+
+        .equal {
+            grid-column: span 2;
+        }
+
+        #resultScreen {
+            display: none;
+        }
+
+        #answer {
+            font-size: 32px;
+            margin: 20px 0;
+            word-wrap: break-word;
+        }
+
+        .facebook {
+            width: 100%;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- NAME SCREEN -->
+    <div id="nameScreen">
+        <h1>FRANZ CALCUTE</h1>
+        <p>Enter your name</p>
+
+        <input
+            type="text"
+            id="nameInput"
+            placeholder="Your name"
+        >
+
+        <button class="start" onclick="startCalculator()">
+            START
+        </button>
+    </div>
+
+
+    <!-- CALCULATOR -->
+    <div id="calculator">
+
+        <h1>FRANZ CALCUTE</h1>
+
+        <input
+            type="text"
+            id="display"
+            readonly
+        >
+
+        <div class="buttons">
+
+            <button onclick="clearDisplay()">C</button>
+            <button onclick="backspace()">⌫</button>
+            <button onclick="add('%')">%</button>
+            <button onclick="add('/')">÷</button>
+
+            <button onclick="add('7')">7</button>
+            <button onclick="add('8')">8</button>
+            <button onclick="add('9')">9</button>
+            <button onclick="add('*')">×</button>
+
+            <button onclick="add('4')">4</button>
+            <button onclick="add('5')">5</button>
+            <button onclick="add('6')">6</button>
+            <button onclick="add('-')">−</button>
+
+            <button onclick="add('1')">1</button>
+            <button onclick="add('2')">2</button>
+            <button onclick="add('3')">3</button>
+            <button onclick="add('+')">+</button>
+
+            <button onclick="add('0')">0</button>
+            <button onclick="add('.')">.</button>
+
+            <button
+                class="equal"
+                onclick="solve()">
+                =
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESULT SCREEN -->
+    <div id="resultScreen">
+
+        <h1>RESULT</h1>
+
+        <p id="greeting"></p>
+
+        <div id="answer"></div>
+
+        <button
+            class="facebook"
+            onclick="openFacebook()">
+            CLICK HERE
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    let userName = "";
+
+    function startCalculator() {
+
+        const input = document.getElementById("nameInput");
+
+        if (input.value.trim() === "") {
+            alert("Please enter your name.");
+            return;
+        }
+
+        userName = input.value.trim();
+
+        document.getElementById("nameScreen").style.display = "none";
+        document.getElementById("calculator").style.display = "block";
+    }
+
+
+    function add(value) {
+
+        document.getElementById("display").value += value;
+
+    }
+
+
+    function clearDisplay() {
+
+        document.getElementById("display").value = "";
+
+    }
+
+
+    function backspace() {
+
+        const display = document.getElementById("display");
+
+        display.value = display.value.slice(0, -1);
+
+    }
+
+
+    function solve() {
+
+        const display = document.getElementById("display");
+
+        if (display.value.trim() === "") {
+            alert("Enter an equation first.");
+            return;
+        }
+
+        try {
+
+            let expression = display.value;
+
+            let result = Function(
+                '"use strict"; return (' + expression + ')'
+            )();
+
+            document.getElementById("calculator").style.display = "none";
+
+            document.getElementById("resultScreen").style.display = "block";
+
+            document.getElementById("greeting").textContent =
+                "HI, " + userName + "!";
+
+            document.getElementById("answer").textContent =
+                result;
+
+        } catch (error) {
+
+            alert("Invalid equation.");
+
+        }
+
+    }
+
+
+    function openFacebook() {
+
+        window.location.href =
+            "https://www.facebook.com/franz.dador.56/about";
+
+    }
+
+</script>
+
+</body>
+</html>
